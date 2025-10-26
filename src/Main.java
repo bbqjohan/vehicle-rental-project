@@ -27,7 +27,7 @@ public class Main {
     //      inventory.add(car);
     //    }
 
-    MembershipService membershipService = new MembershipService();
+    //    MembershipService membershipService = new MembershipService();
     //    membershipService.promptInitMenu();
 
     startMenu();
@@ -42,20 +42,30 @@ public class Main {
     System.out.println(
         "=========================================================================================");
 
-    System.out.println("\nPlease select an option below.\n");
-    System.out.println("Type \"exit\" at any point to exit the application.");
-    System.out.println("Type \"back\" to go back to a previous menu\n");
-    System.out.println("Members\t\t\t\tBooking");
-    System.out.println("----------------    -------------------");
-    System.out.println("1. Add member\t\t4. Book vehicle");
-    System.out.println("2. Find member\t\t5. Return vehicle");
-    System.out.println("3. Update member");
-
     Scanner scanner = new Scanner(System.in);
+    MembershipService membershipService = new MembershipService();
 
-    System.out.print("\n> ");
-    String input = scanner.nextLine();
+    while (true) {
+      System.out.println("\nPlease select an option below.\n");
+      System.out.println("Type \"exit\" at any point to exit the application.");
+      System.out.println("Type \"back\" to go back to a previous menu\n");
+      System.out.println("Members\t\t\t\tBooking");
+      System.out.println("----------------    -------------------");
+      System.out.println("1. Add member\t\t4. Book vehicle");
+      System.out.println("2. Find member\t\t5. Return vehicle");
+      System.out.println("3. Update member");
 
-    System.out.println(input);
+      while (true) {
+        System.out.print("\n> ");
+        String input = scanner.nextLine();
+
+        Input.maybeExit(input);
+
+        if (input.equals("1")) {
+          membershipService.displayAddMemberView();
+          break;
+        }
+      }
+    }
   }
 }

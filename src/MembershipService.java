@@ -3,65 +3,78 @@ import java.util.Scanner;
 public class MembershipService {
   private MemberRegistry registry = new MemberRegistry();
 
-  public void promptInitMenu() {
-    Scanner scanner = new Scanner(System.in);
-    String input;
+  //  public void promptInitMenu() {
+  //    Scanner scanner = new Scanner(System.in);
+  //    String input;
+  //
+  //    while (true) {
+  //      System.out.println("\n=========================================");
+  //      System.out.println("Welcome to the membership service.");
+  //      System.out.println("=========================================");
+  //      System.out.println("\nPlease select an option below.");
+  //      System.out.println("\n1. Add member");
+  //      System.out.println("2. Find member");
+  //      System.out.println("3. Update member\n");
+  //
+  //      while (true) {
+  //        System.out.print("Your choice: ");
+  //        input = scanner.nextLine();
+  //
+  //        if (this.hasUserExited(input)) {
+  //          return;
+  //        }
+  //
+  //        if (input.equals("1")) {
+  //          promptAddMember();
+  //          break;
+  //        } else if (input.equals("2")) {
+  //          promptFindMember();
+  //          break;
+  //        } else if (input.equals("3")) {
+  //          promptUpdateMember();
+  //          break;
+  //        }
+  //      }
+  //    }
+  //  }
 
-    while (true) {
-      System.out.println("\n=========================================");
-      System.out.println("Welcome to the membership service.");
-      System.out.println("=========================================");
-      System.out.println("\nPlease select an option below.");
-      System.out.println("\n1. Add member");
-      System.out.println("2. Find member");
-      System.out.println("3. Update member\n");
-
-      while (true) {
-        System.out.print("Your choice: ");
-        input = scanner.nextLine();
-
-        if (this.hasUserExited(input)) {
-          return;
-        }
-
-        if (input.equals("1")) {
-          promptAddMember();
-          break;
-        } else if (input.equals("2")) {
-          promptFindMember();
-          break;
-        } else if (input.equals("3")) {
-          promptUpdateMember();
-          break;
-        }
-      }
-    }
-  }
-
-  private void promptAddMember() {
-    System.out.println("\n=========================================");
-    System.out.println("Add a new member");
+  public void displayAddMemberView() {
+    System.out.println("\n");
+    System.out.println(":: Add a new member");
     System.out.println("=========================================");
 
     Scanner scanner = new Scanner(System.in);
 
-    System.out.print("Enter name: ");
+    System.out.print("Name: ");
     String name = scanner.nextLine();
 
-    if (this.hasUserExited(name)) {
+    Input.maybeExit(name);
+
+    if (Input.isBack(name)) {
       return;
     }
 
     MembershipLevel level = null;
 
     while (level == null) {
-      System.out.print("Enter membership level (bronze, silver, gold): ");
-      String line = scanner.nextLine();
+      System.out.print("Membership level (bronze, silver, gold): ");
+      String input = scanner.nextLine();
 
-      level = MembershipLevel.from(line);
+      Input.maybeExit(input);
+
+      if (Input.isBack(input)) {
+        return;
+      }
+
+      level = MembershipLevel.from(input);
     }
 
     this.registry.add(new Member(name, level));
+
+    System.out.printf("\n-- New member \"%s\" registered! --%n", name);
+    System.out.println("Press any key to continue");
+
+    scanner.nextLine();
   }
 
   private void promptFindMember() {

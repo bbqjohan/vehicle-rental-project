@@ -64,6 +64,9 @@ public class Main {
         if (input.equals("1")) {
           membershipService.displayAddMemberView();
           break;
+        } else if (input.equals("2")) {
+          membershipService.displayFindMember();
+          break;
         }
       }
     }

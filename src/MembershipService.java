@@ -1,42 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MembershipService {
   private MemberRegistry registry = new MemberRegistry();
 
-  //  public void promptInitMenu() {
-  //    Scanner scanner = new Scanner(System.in);
-  //    String input;
-  //
-  //    while (true) {
-  //      System.out.println("\n=========================================");
-  //      System.out.println("Welcome to the membership service.");
-  //      System.out.println("=========================================");
-  //      System.out.println("\nPlease select an option below.");
-  //      System.out.println("\n1. Add member");
-  //      System.out.println("2. Find member");
-  //      System.out.println("3. Update member\n");
-  //
-  //      while (true) {
-  //        System.out.print("Your choice: ");
-  //        input = scanner.nextLine();
-  //
-  //        if (this.hasUserExited(input)) {
-  //          return;
-  //        }
-  //
-  //        if (input.equals("1")) {
-  //          promptAddMember();
-  //          break;
-  //        } else if (input.equals("2")) {
-  //          promptFindMember();
-  //          break;
-  //        } else if (input.equals("3")) {
-  //          promptUpdateMember();
-  //          break;
-  //        }
-  //      }
-  //    }
-  //  }
+  // TODO Constructor is only for testing.
+  MembershipService() {
+    Member[] members = {
+      new Member("Bosse", MembershipLevel.BRONZE),
+      new Member("Sara", MembershipLevel.SILVER),
+      new Member("Emil", MembershipLevel.GOLD),
+      new Member("Bosse", MembershipLevel.BRONZE),
+      new Member("Jennifer", MembershipLevel.SILVER),
+    };
+
+    for (Member member : members) {
+      registry.add(member);
+    }
+  }
 
   public void displayAddMemberView() {
     System.out.println("\n");
@@ -77,31 +59,33 @@ public class MembershipService {
     scanner.nextLine();
   }
 
-  private void promptFindMember() {
-    System.out.println("\n=========================================");
-    System.out.println("Find a member");
+  public void displayFindMember() {
+    System.out.println("\n");
+    System.out.println(":: Find a member");
     System.out.println("=========================================");
 
     Scanner scanner = new Scanner(System.in);
-    Member member = null;
+    List<Member> members = new ArrayList<>();
 
-    while (member == null) {
-      System.out.print("Enter member name: ");
+    while (members.isEmpty()) {
+      System.out.print("Name: ");
       String input = scanner.nextLine();
 
-      if (this.hasUserExited(input)) {
+      Input.maybeExit(input);
+
+      if (Input.isBack(input)) {
         return;
       }
 
-      member = this.registry.getByName(input);
+      members = this.registry.getByName(input);
 
-      if (member == null) {
+      if (members.isEmpty()) {
         System.out.println("A member with that name couldn't be found.");
       }
     }
 
     System.out.println();
-    member.display();
+    this.registry.listMembers(members);
     System.out.println("\nPress any key to continue.");
     scanner.nextLine();
   }

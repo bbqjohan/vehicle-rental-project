@@ -43,13 +43,24 @@ public class MemberRegistry {
     return new ArrayList<Member>(this.members.values());
   }
 
-  public Member getByName(String name) {
+  public List<Member> getByName(String name) {
+    List<Member> members = new ArrayList<>();
+
     for (Member member : this.getList()) {
       if (member.getName().equalsIgnoreCase(name)) {
-        return member;
+        members.add(member);
       }
     }
 
-    return null;
+    return members;
+  }
+
+  public void listMembers(List<Member> members) {
+    System.out.println("Id\tLevel\tName");
+    System.out.println("--------------------------------");
+
+    for (Member member : members) {
+      System.out.printf("%s\t%s\t%s\n", member.getId(), member.getLevel(), member.getName());
+    }
   }
 }

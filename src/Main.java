@@ -54,19 +54,25 @@ public class Main {
       System.out.println("1. Add member\t\t4. Book vehicle");
       System.out.println("2. Find member\t\t5. Return vehicle");
       System.out.println("3. Update member");
+      System.out.println();
 
+      innerLoop:
       while (true) {
-        System.out.print("\n> ");
+        System.out.print("> ");
         String input = scanner.nextLine();
 
         Input.maybeExit(input);
 
-        if (input.equals("1")) {
-          membershipService.displayAddMemberView();
-          break;
-        } else if (input.equals("2")) {
-          membershipService.displayFindMember();
-          break;
+        switch (input) {
+          case "1":
+            membershipService.displayAddMemberView();
+            break innerLoop;
+          case "2":
+            membershipService.displayFindMemberView();
+            break innerLoop;
+          case "3":
+            membershipService.displayUpdateMemberView();
+            break innerLoop;
         }
       }
     }

@@ -59,7 +59,7 @@ public class MembershipService {
     scanner.nextLine();
   }
 
-  public void displayFindMember() {
+  public void displayFindMemberView() {
     System.out.println("\n");
     System.out.println(":: Find a member");
     System.out.println("=========================================");
@@ -90,19 +90,21 @@ public class MembershipService {
     scanner.nextLine();
   }
 
-  private void promptUpdateMember() {
-    System.out.println("\n=========================================");
-    System.out.println("Update a member");
+  public void displayUpdateMemberView() {
+    System.out.println("\n");
+    System.out.println(":: Update member information");
     System.out.println("=========================================");
 
     Scanner scanner = new Scanner(System.in);
     Member member = null;
 
     while (member == null) {
-      System.out.print("Enter member id: ");
+      System.out.print("Id: ");
       String input = scanner.nextLine();
 
-      if (this.hasUserExited(input)) {
+      Input.maybeExit(input);
+
+      if (Input.isBack(input)) {
         return;
       }
 
@@ -122,14 +124,18 @@ public class MembershipService {
     }
 
     while (true) {
-      System.out.println("\nSelect what you want to update for member " + member.getId() + "\n");
+      System.out.printf(
+          "\n<< Selected member: %s, %s, %s >>\n\n",
+          member.getId(), member.getName(), member.getLevel());
       System.out.println("1. Name");
       System.out.println("2. Membership level");
 
-      System.out.print("Your choice: ");
+      System.out.print("> ");
       String input = scanner.nextLine();
 
-      if (this.hasUserExited(input)) {
+      Input.maybeExit(input);
+
+      if (Input.isBack(input)) {
         return;
       }
 
@@ -140,8 +146,10 @@ public class MembershipService {
 
           input = scanner.nextLine();
 
-          if (this.hasUserExited(input)) {
-            break;
+          Input.maybeExit(input);
+
+          if (Input.isBack(input)) {
+            return;
           }
 
           member.setName(input);
@@ -153,8 +161,10 @@ public class MembershipService {
           System.out.print("New level (bronze, silver, gold): ");
           input = scanner.nextLine();
 
-          if (this.hasUserExited(input)) {
-            break;
+          Input.maybeExit(input);
+
+          if (Input.isBack(input)) {
+            return;
           }
 
           MembershipLevel newLevel = MembershipLevel.from(input);

@@ -14,21 +14,19 @@ public class Main {
     //      memberRegisty.add(member);
     //    }
     //
-    //    Inventory inventory = new Inventory();
-    //
-    //    var cars =
-    //        new Car[] {
-    //          new Car("Red", "Audi", "S3", CarType.SEDAN, 4),
-    //          new Car("White", "Tesla", "Model Y", CarType.SUV, 4),
-    //          new Car("Blue", "Fiat", "500", CarType.COMPACT, 2),
-    //        };
 
-    //    for (Car car : cars) {
-    //      inventory.add(car);
-    //    }
+    Inventory inventory = new Inventory();
 
-    //    MembershipService membershipService = new MembershipService();
-    //    membershipService.promptInitMenu();
+    var cars =
+        new Car[] {
+          new Car("Red", "Audi", "S3", CarType.SEDAN, 4),
+          new Car("White", "Tesla", "Model Y", CarType.SUV, 4),
+          new Car("Blue", "Fiat", "500", CarType.COMPACT, 2),
+        };
+
+    for (Car car : cars) {
+      inventory.add(car);
+    }
 
     startMenu();
   }

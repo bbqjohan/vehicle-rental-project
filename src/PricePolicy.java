@@ -1,5 +1,12 @@
 public interface PricePolicy {
-  double getMembershipFee(MembershipLevel status);
+  default double getMembershipFee(MembershipLevel status) {
+    return switch (status) {
+      case BRONZE -> this.getBronzeMembershipFee();
+      case SILVER -> this.getSilverMembershipFee();
+      case GOLD -> this.getGoldMembershipFee();
+      case null -> 0;
+    };
+  }
 
   double getBronzeMembershipFee();
 

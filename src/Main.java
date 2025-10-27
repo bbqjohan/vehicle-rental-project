@@ -38,10 +38,11 @@ public class Main {
       inventory.add(motorcycle);
     }
 
-    startMenu();
+    startMenu(inventory);
+    //    new RentalService(inventory).displayAllVehicles();
   }
 
-  static void startMenu() {
+  static void startMenu(Inventory inventory) {
     System.out.println(
         "=========================================================================================");
     System.out.println("Welcome to Vehicle Rentals!");
@@ -52,6 +53,7 @@ public class Main {
 
     Scanner scanner = new Scanner(System.in);
     MembershipService membershipService = new MembershipService();
+    RentalService rentalService = new RentalService(inventory);
 
     while (true) {
       System.out.println("\nPlease select an option below.\n");
@@ -80,6 +82,9 @@ public class Main {
             break innerLoop;
           case "3":
             membershipService.displayUpdateMemberView();
+            break innerLoop;
+          case "4":
+            rentalService.displayBookVehicleView();
             break innerLoop;
         }
       }

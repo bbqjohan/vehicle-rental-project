@@ -1,8 +1,10 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 
 public class Inventory {
   private int idCount = 0;
-  private TreeMap<Integer, Item> items;
+  private TreeMap<Integer, Item> items = new TreeMap<>();
 
   public void add(Item item) {
     if (item == null) {
@@ -29,5 +31,9 @@ public class Inventory {
 
   public Item get(int id) {
     return this.items.get(id);
+  }
+
+  public List<Item> getList() {
+    return new ArrayList<>(this.items.values());
   }
 }

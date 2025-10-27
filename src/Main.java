@@ -2,30 +2,40 @@ import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    //    MemberRegistry memberRegisty = new MemberRegistry();
-    //
-    //    Member[] members = {
-    //      new Member("A", MembershipLevel.BRONZE),
-    //      new Member("B", MembershipLevel.SILVER),
-    //      new Member("C", MembershipLevel.GOLD)
-    //    };
-    //
-    //    for (Member member : members) {
-    //      memberRegisty.add(member);
-    //    }
-    //
-
     Inventory inventory = new Inventory();
 
     var cars =
         new Car[] {
-          new Car("Red", "Audi", "S3", CarType.SEDAN, 4),
-          new Car("White", "Tesla", "Model Y", CarType.SUV, 4),
-          new Car("Blue", "Fiat", "500", CarType.COMPACT, 2),
+          new Car("Red", "Audi", "S3", CarType.SEDAN),
+          new Car("White", "Honda", "Accord", CarType.SEDAN),
+          new Car("Black", "Toyota", "Crown", CarType.SEDAN),
+          new Car("White", "Tesla", "Model Y", CarType.SUV),
+          new Car("White", "Ford", "Explorer", CarType.SUV),
+          new Car("White", "Ford", "Bronco", CarType.SUV),
+          new Car("Blue", "Fiat", "500", CarType.COMPACT),
+          new Car("Red", "Volkswagen", "Golf", CarType.COMPACT),
+          new Car("Black", "Toyota", "Corolla", CarType.COMPACT),
+        };
+
+    var motorcycles =
+        new Motorcycle[] {
+          new Motorcycle("Red", "Suzuki", "Hayabusa", MotorcycleType.SPORT),
+          new Motorcycle("White", "Yamaha", "YZF-R6R", MotorcycleType.SPORT),
+          new Motorcycle("Black", "Kawasaki", "Ninja", MotorcycleType.SPORT),
+          new Motorcycle("White", "Suzuki", "Boulevard", MotorcycleType.CRUISER),
+          new Motorcycle("Black", "Yamaha", "V Star 250", MotorcycleType.CRUISER),
+          new Motorcycle("White", "Honda", "CMX 1100", MotorcycleType.CRUISER),
+          new Motorcycle("Blue", "Honda", "SH350", MotorcycleType.SCOOTER),
+          new Motorcycle("Red", "Aprilla", "SR150", MotorcycleType.SCOOTER),
+          new Motorcycle("Blue", "Aprilla", "SR160", MotorcycleType.SCOOTER),
         };
 
     for (Car car : cars) {
       inventory.add(car);
+    }
+
+    for (Motorcycle motorcycle : motorcycles) {
+      inventory.add(motorcycle);
     }
 
     startMenu();

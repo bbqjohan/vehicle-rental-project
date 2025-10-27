@@ -1,13 +1,13 @@
-public class Car extends Item {
-  private CarType carType;
+public class Motorcycle extends Item {
+  private MotorcycleType motorcycleType;
 
-  public Car(String color, String brand, String model, CarType carType) {
+  public Motorcycle(String color, String brand, String model, MotorcycleType carType) {
     super(-1, VehicleType.CAR, color, brand, model, true);
-    this.carType = carType;
+    this.motorcycleType = carType;
   }
 
-  public CarType getCarType() {
-    return this.carType;
+  public MotorcycleType getMotorCycleType() {
+    return this.motorcycleType;
   }
 
   @Override

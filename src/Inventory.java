@@ -9,7 +9,9 @@ public class Inventory {
       return;
     }
 
+    item.setId(idCount);
     this.items.put(idCount, item);
+
     idCount++;
   }
 

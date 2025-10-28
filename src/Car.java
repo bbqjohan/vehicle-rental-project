@@ -1,8 +1,8 @@
 public class Car extends Item {
   private CarType carType;
 
-  public Car(String color, String brand, String model, CarType carType) {
-    super(-1, VehicleType.CAR, color, brand, model, true);
+  public Car(String color, String brand, String model, CarType carType, boolean available) {
+    super(-1, VehicleType.CAR, color, brand, model, available);
     this.carType = carType;
   }
 

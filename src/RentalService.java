@@ -1,8 +1,8 @@
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class RentalService {
   Inventory inventory;
+  List<Rental> rentals = new ArrayList<>();
 
   RentalService(Inventory inventory) {
     this.inventory = inventory;
@@ -24,24 +24,83 @@ public class RentalService {
         String input = scanner.nextLine();
 
         switch (input) {
-          case Input.exit -> Input.maybeExit(input);
-          case Input.back -> {
-            return;
-          }
           case "1" -> {
-            displayAllVehicles();
+            displayAllVehicles(this.inventory.getList());
             System.out.println("\nPress any key to continue.");
             scanner.nextLine();
             break innerLoop;
+          }
+          case "2" -> {
+            displayFilterView();
+            System.out.println("\nPress any key to continue.");
+            scanner.nextLine();
+            break innerLoop;
+          }
+          case Input.exit -> Input.maybeExit(input);
+          case Input.back -> {
+            return;
           }
         }
       }
     }
   }
 
-  public void displayAllVehicles() {
-    List<Item> items = this.inventory.getList();
+  public void displayFilterView() {
+    String explanation =
+"""
+* ========================================================
+*
+* How to filter.
+*
+* Available filters:
+*
+*   - type
+*   - configuration
+*   - available
+*
+* Single filter example:
+*   type = car
+*
+* Multiple filters example:
+*   type = car, available = true
+*
+* Spaces are optional and can be left out.
+*
+* ========================================================
+""";
+    Scanner scanner = new Scanner(System.in);
 
+    mainLoop:
+    while (true) {
+      System.out.println("Enter your filtering criteria. Type \"help\" for an explanation.");
+      System.out.print("> ");
+      String input = scanner.nextLine();
+
+      switch (input) {
+        case Input.exit -> Input.maybeExit(input);
+        case "help" -> System.out.println(explanation);
+        case Input.back -> {
+          return;
+        }
+        default -> {
+          try {
+            Map<String, String> filters = this.inventory.parseFilters(input);
+            List<Item> items = this.inventory.filter(filters);
+
+            this.displayAllVehicles(items);
+            break mainLoop;
+          } catch (Exception e) {
+            System.out.println(e.getMessage());
+          }
+        }
+      }
+    }
+
+    System.out.println("\nPress any key to continue.");
+    scanner.nextLine();
+  }
+
+  public void displayAllVehicles(List<Item> items) {
     System.out.println("Id\tType\t\tBrand\t\tModel\t\tConfiguration  Available");
     System.out.println("-----------------------------------------------------------------");
 

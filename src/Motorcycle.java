@@ -1,8 +1,9 @@
 public class Motorcycle extends Item {
   private MotorcycleType motorcycleType;
 
-  public Motorcycle(String color, String brand, String model, MotorcycleType carType) {
-    super(-1, VehicleType.MOTORCYCLE, color, brand, model, true);
+  public Motorcycle(
+      String color, String brand, String model, MotorcycleType carType, boolean available) {
+    super(-1, VehicleType.MOTORCYCLE, color, brand, model, available);
     this.motorcycleType = carType;
   }
 

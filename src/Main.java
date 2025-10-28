@@ -6,28 +6,28 @@ public class Main {
 
     var cars =
         new Car[] {
-          new Car("Red", "Audi", "S3", CarType.SEDAN),
-          new Car("White", "Honda", "Accord", CarType.SEDAN),
-          new Car("Black", "Toyota", "Crown", CarType.SEDAN),
-          new Car("White", "Tesla", "Model Y", CarType.SUV),
-          new Car("White", "Ford", "Explorer", CarType.SUV),
-          new Car("White", "Ford", "Bronco", CarType.SUV),
-          new Car("Blue", "Fiat", "500", CarType.COMPACT),
-          new Car("Red", "Volkswagen", "Golf", CarType.COMPACT),
-          new Car("Black", "Toyota", "Corolla", CarType.COMPACT),
+          new Car("Red", "Audi", "S3", CarType.SEDAN, true),
+          new Car("White", "Honda", "Accord", CarType.SEDAN, true),
+          new Car("Black", "Toyota", "Crown", CarType.SEDAN, true),
+          new Car("White", "Tesla", "Model Y", CarType.SUV, false),
+          new Car("White", "Ford", "Explorer", CarType.SUV, true),
+          new Car("White", "Ford", "Bronco", CarType.SUV, false),
+          new Car("Blue", "Fiat", "500", CarType.COMPACT, true),
+          new Car("Red", "Volkswagen", "Golf", CarType.COMPACT, true),
+          new Car("Black", "Toyota", "Corolla", CarType.COMPACT, true),
         };
 
     var motorcycles =
         new Motorcycle[] {
-          new Motorcycle("Red", "Suzuki", "Hayabusa", MotorcycleType.SPORT),
-          new Motorcycle("White", "Yamaha", "YZF-R6R", MotorcycleType.SPORT),
-          new Motorcycle("Black", "Kawasaki", "Ninja", MotorcycleType.SPORT),
-          new Motorcycle("White", "Suzuki", "Boulevard", MotorcycleType.CRUISER),
-          new Motorcycle("Black", "Yamaha", "V Star 250", MotorcycleType.CRUISER),
-          new Motorcycle("White", "Honda", "CMX 1100", MotorcycleType.CRUISER),
-          new Motorcycle("Blue", "Honda", "SH350", MotorcycleType.SCOOTER),
-          new Motorcycle("Red", "Aprilla", "SR150", MotorcycleType.SCOOTER),
-          new Motorcycle("Blue", "Aprilla", "SR160", MotorcycleType.SCOOTER),
+          new Motorcycle("Red", "Suzuki", "Hayabusa", MotorcycleType.SPORT, true),
+          new Motorcycle("White", "Yamaha", "YZF-R6R", MotorcycleType.SPORT, true),
+          new Motorcycle("Black", "Kawasaki", "Ninja", MotorcycleType.SPORT, true),
+          new Motorcycle("White", "Suzuki", "Boulevard", MotorcycleType.CRUISER, true),
+          new Motorcycle("Black", "Yamaha", "V Star 250", MotorcycleType.CRUISER, true),
+          new Motorcycle("White", "Honda", "CMX 1100", MotorcycleType.CRUISER, true),
+          new Motorcycle("Blue", "Honda", "SH350", MotorcycleType.SCOOTER, true),
+          new Motorcycle("Red", "Aprilla", "SR150", MotorcycleType.SCOOTER, true),
+          new Motorcycle("Blue", "Aprilla", "SR160", MotorcycleType.SCOOTER, true),
         };
 
     for (Car car : cars) {
@@ -38,8 +38,8 @@ public class Main {
       inventory.add(motorcycle);
     }
 
-    startMenu(inventory);
-    //    new RentalService(inventory).displayAllVehicles();
+    //    startMenu(inventory);
+    new RentalService(inventory).displayFilterView();
   }
 
   static void startMenu(Inventory inventory) {

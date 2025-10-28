@@ -1,11 +1,20 @@
+package service;
+
+import database.Inventory;
+import database.MemberRegistry;
+import entity.*;
+import lib.Input;
+
 import java.util.*;
 
 public class RentalService {
   Inventory inventory;
+  MemberRegistry memberRegistry;
   List<Rental> rentals = new ArrayList<>();
 
-  RentalService(Inventory inventory) {
+  RentalService(Inventory inventory, MemberRegistry memberRegistry) {
     this.inventory = inventory;
+    this.memberRegistry = memberRegistry;
   }
 
   public void displayBookVehicleView() {
@@ -100,6 +109,60 @@ public class RentalService {
     scanner.nextLine();
   }
 
+  public void displayBookingView() {
+    Scanner scanner = new Scanner(System.in);
+    String input;
+
+    while (true) {
+      System.out.println("Enter vehicle ID");
+      System.out.println("> ");
+
+      Item vehicle = null;
+      Member member = null;
+
+      input = scanner.nextLine();
+
+      switch (input.toLowerCase()) {
+        case Input.exit -> Input.maybeExit(input);
+        case Input.back -> {
+          return;
+        }
+        default -> {
+          try {
+            vehicle = this.inventory.get(Integer.parseInt(input));
+          } catch (Exception e) {
+            if (e instanceof NumberFormatException) {
+              System.out.println("A vehicle with that ID does not exist.");
+            }
+          }
+        }
+      }
+
+      input = scanner.nextLine();
+
+      switch (input.toLowerCase()) {
+        case Input.exit -> Input.maybeExit(input);
+        case Input.back -> {
+          return;
+        }
+        default -> {
+          try {
+            member = this.memberRegistry.get(Integer.parseInt(input));
+          } catch (Exception e) {
+            if (e instanceof NumberFormatException) {
+              System.out.println("A member with that ID does not exist.");
+            }
+          }
+        }
+      }
+
+      if (member != null && vehicle != null) {
+        Rental rental = new Rental(member, vehicle);
+        this.rentals.add(rental);
+      }
+    }
+  }
+
   public void displayAllVehicles(List<Item> items) {
     int colIdWidth = 2;
     int colTypeWidth = 4;
@@ -125,17 +188,17 @@ public class RentalService {
 
     String header =
         "Id"
-            + this.getColStringPadding(this.getColPadding(colIdWidth, 2))
+            + this.getColPadding(this.getColPaddingLength(colIdWidth, 2))
             + "Type"
-            + this.getColStringPadding(this.getColPadding(colTypeWidth, 4))
+            + this.getColPadding(this.getColPaddingLength(colTypeWidth, 4))
             + "Brand"
-            + this.getColStringPadding(this.getColPadding(colBrandWidth, 5))
+            + this.getColPadding(this.getColPaddingLength(colBrandWidth, 5))
             + "Model"
-            + this.getColStringPadding(this.getColPadding(colModelWidth, 5))
+            + this.getColPadding(this.getColPaddingLength(colModelWidth, 5))
             + "Configuration"
-            + this.getColStringPadding(this.getColPadding(colConfigWidth, 13))
+            + this.getColPadding(this.getColPaddingLength(colConfigWidth, 13))
             + "Available"
-            + this.getColStringPadding(this.getColPadding(colAvailableWidth, 9));
+            + this.getColPadding(this.getColPaddingLength(colAvailableWidth, 9));
 
     System.out.println(header);
     System.out.println("-".repeat(header.length()));
@@ -158,30 +221,19 @@ public class RentalService {
         configLen = ((Motorcycle) item).getMotorCycleType().toString().length();
       }
 
-      String idColPadding = this.getColStringPadding(this.getColPadding(colIdWidth, idLen));
-      String typeColPadding = this.getColStringPadding(this.getColPadding(colTypeWidth, typeLen));
-      String brandColPadding =
-          this.getColStringPadding(this.getColPadding(colBrandWidth, brandLen));
-      String modelColPadding =
-          this.getColStringPadding(this.getColPadding(colModelWidth, modelLen));
-      String configColPadding =
-          this.getColStringPadding(this.getColPadding(colConfigWidth, configLen));
-      String availableColPadding =
-          this.getColStringPadding(this.getColPadding(colAvailableWidth, availableLen));
-
       System.out.printf(
           "%s"
-              + idColPadding
+              + this.getColPadding(this.getColPaddingLength(colIdWidth, idLen))
               + "%s"
-              + typeColPadding
+              + this.getColPadding(this.getColPaddingLength(colTypeWidth, typeLen))
               + "%s"
-              + brandColPadding
+              + this.getColPadding(this.getColPaddingLength(colBrandWidth, brandLen))
               + "%s"
-              + modelColPadding
+              + this.getColPadding(this.getColPaddingLength(colModelWidth, modelLen))
               + "%s"
-              + configColPadding
+              + this.getColPadding(this.getColPaddingLength(colConfigWidth, configLen))
               + "%s"
-              + availableColPadding
+              + this.getColPadding(this.getColPaddingLength(colAvailableWidth, availableLen))
               + "\n",
           item.getId(),
           item.getType(),
@@ -192,11 +244,11 @@ public class RentalService {
     }
   }
 
-  public int getColPadding(int colLength, int valueLength) {
+  public int getColPaddingLength(int colLength, int valueLength) {
     return valueLength < colLength ? colLength - valueLength + 2 : 2;
   }
 
-  public String getColStringPadding(int colPadding) {
+  public String getColPadding(int colPadding) {
     return " ".repeat(colPadding);
   }
 }

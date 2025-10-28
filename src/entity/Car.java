@@ -1,5 +1,7 @@
+package entity;
+
 public class Car extends Item {
-  private CarType carType;
+  private final CarType carType;
 
   public Car(String color, String brand, String model, CarType carType, boolean available) {
     super(-1, VehicleType.CAR, color, brand, model, available);

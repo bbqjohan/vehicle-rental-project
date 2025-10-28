@@ -1,3 +1,10 @@
+import database.Inventory;
+import database.MemberRegistry;
+import entity.*;
+import lib.Input;
+import service.MembershipService;
+import service.RentalService;
+
 import java.util.Scanner;
 
 public class Main {
@@ -38,12 +45,26 @@ public class Main {
       inventory.add(motorcycle);
     }
 
-    //    startMenu(inventory);
-    new RentalService(inventory).displayAllVehicles(inventory.getList());
-    //    new RentalService(inventory).displayFilterView();
+    Member[] members = {
+      new Member("Bosse", MembershipLevel.BRONZE),
+      new Member("Sara", MembershipLevel.SILVER),
+      new Member("Emil", MembershipLevel.GOLD),
+      new Member("Bosse", MembershipLevel.BRONZE),
+      new Member("Jennifer", MembershipLevel.SILVER),
+    };
+
+    MemberRegistry memberRegistry = new MemberRegistry();
+
+    for (Member member : members) {
+      memberRegistry.add(member);
+    }
+
+    //    startMenu(inventory, memberRegistry);
+    //    new service.RentalService(inventory).displayAllVehicles(inventory.getList());
+    new RentalService(inventory, memberRegistry).displayBookingView();
   }
 
-  static void startMenu(Inventory inventory) {
+  static void startMenu(Inventory inventory, MemberRegistry memberRegistry) {
     System.out.println(
         "=========================================================================================");
     System.out.println("Welcome to Vehicle Rentals!");
@@ -53,8 +74,8 @@ public class Main {
         "=========================================================================================");
 
     Scanner scanner = new Scanner(System.in);
-    MembershipService membershipService = new MembershipService();
-    RentalService rentalService = new RentalService(inventory);
+    MembershipService membershipService = new MembershipService(memberRegistry);
+    RentalService rentalService = new RentalService(inventory, memberRegistry);
 
     while (true) {
       System.out.println("\nPlease select an option below.\n");
@@ -72,21 +93,27 @@ public class Main {
         System.out.print("> ");
         String input = scanner.nextLine();
 
-        Input.maybeExit(input);
-
-        switch (input) {
-          case "1":
+        switch (input.toLowerCase()) {
+          case Input.exit -> System.exit(0);
+          case Input.back -> {
+            return;
+          }
+          case "1" -> {
             membershipService.displayAddMemberView();
             break innerLoop;
-          case "2":
+          }
+          case "2" -> {
             membershipService.displayFindMemberView();
             break innerLoop;
-          case "3":
+          }
+          case "3" -> {
             membershipService.displayUpdateMemberView();
             break innerLoop;
-          case "4":
+          }
+          case "4" -> {
             rentalService.displayBookVehicleView();
             break innerLoop;
+          }
         }
       }
     }

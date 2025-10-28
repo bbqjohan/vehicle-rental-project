@@ -1,3 +1,5 @@
+package entity;
+
 public abstract class Item implements PricePolicy {
   private int id;
   private boolean available;

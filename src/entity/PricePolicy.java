@@ -1,3 +1,5 @@
+package entity;
+
 public interface PricePolicy {
   default double getMembershipFee(MembershipLevel status) {
     return switch (status) {

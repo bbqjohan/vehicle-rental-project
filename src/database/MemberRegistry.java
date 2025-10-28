@@ -1,8 +1,12 @@
+package database;
+
+import entity.Member;
+
 import java.util.*;
 
 public class MemberRegistry {
   private int idCount = 0;
-  private Map<Integer, Member> members = new TreeMap<>();
+  private final Map<Integer, Member> members = new TreeMap<>();
 
   public void add(Member member) {
     if (member == null) {
@@ -40,7 +44,7 @@ public class MemberRegistry {
   }
 
   public List<Member> getList() {
-    return new ArrayList<Member>(this.members.values());
+    return new ArrayList<>(this.members.values());
   }
 
   public List<Member> getByName(String name) {

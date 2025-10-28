@@ -1,3 +1,10 @@
+package service;
+
+import database.MemberRegistry;
+import entity.Member;
+import entity.MembershipLevel;
+import lib.Input;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -5,19 +12,8 @@ import java.util.Scanner;
 public class MembershipService {
   private MemberRegistry registry = new MemberRegistry();
 
-  // TODO Constructor is only for testing.
-  MembershipService() {
-    Member[] members = {
-      new Member("Bosse", MembershipLevel.BRONZE),
-      new Member("Sara", MembershipLevel.SILVER),
-      new Member("Emil", MembershipLevel.GOLD),
-      new Member("Bosse", MembershipLevel.BRONZE),
-      new Member("Jennifer", MembershipLevel.SILVER),
-    };
-
-    for (Member member : members) {
-      registry.add(member);
-    }
+  public MembershipService(MemberRegistry registry) {
+    this.registry = registry;
   }
 
   public void displayAddMemberView() {

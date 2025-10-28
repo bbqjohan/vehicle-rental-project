@@ -1,3 +1,5 @@
+package entity;
+
 public class Motorcycle extends Item {
   private MotorcycleType motorcycleType;
 

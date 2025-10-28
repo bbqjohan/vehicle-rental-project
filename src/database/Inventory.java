@@ -1,8 +1,14 @@
+package database;
+
+import entity.Car;
+import entity.Item;
+import entity.Motorcycle;
+
 import java.util.*;
 
 public class Inventory {
   private int idCount = 0;
-  private TreeMap<Integer, Item> items = new TreeMap<>();
+  private final TreeMap<Integer, Item> items = new TreeMap<>();
 
   public void add(Item item) {
     if (item == null) {

@@ -39,7 +39,8 @@ public class Main {
     }
 
     //    startMenu(inventory);
-    new RentalService(inventory).displayFilterView();
+    new RentalService(inventory).displayAllVehicles(inventory.getList());
+    //    new RentalService(inventory).displayFilterView();
   }
 
   static void startMenu(Inventory inventory) {

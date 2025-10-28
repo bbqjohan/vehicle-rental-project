@@ -101,9 +101,6 @@ public class RentalService {
   }
 
   public void displayAllVehicles(List<Item> items) {
-    System.out.println("Id\tType\t\tBrand\t\tModel\t\tConfiguration  Available");
-    System.out.println("-----------------------------------------------------------------");
-
     int colIdWidth = 2;
     int colTypeWidth = 4;
     int colBrandWidth = 5;
@@ -125,6 +122,23 @@ public class RentalService {
             Math.max(((Motorcycle) item).getMotorCycleType().toString().length(), colConfigWidth);
       }
     }
+
+    String header =
+        "Id"
+            + this.getColStringPadding(this.getColPadding(colIdWidth, 2))
+            + "Type"
+            + this.getColStringPadding(this.getColPadding(colTypeWidth, 4))
+            + "Brand"
+            + this.getColStringPadding(this.getColPadding(colBrandWidth, 5))
+            + "Model"
+            + this.getColStringPadding(this.getColPadding(colModelWidth, 5))
+            + "Configuration"
+            + this.getColStringPadding(this.getColPadding(colConfigWidth, 13))
+            + "Available"
+            + this.getColStringPadding(this.getColPadding(colAvailableWidth, 9));
+
+    System.out.println(header);
+    System.out.println("-".repeat(header.length()));
 
     for (Item item : items) {
       int idLen = String.valueOf(item.getId()).length();
@@ -183,12 +197,6 @@ public class RentalService {
   }
 
   public String getColStringPadding(int colPadding) {
-    StringBuilder padding = new StringBuilder();
-
-    for (; colPadding > 0; colPadding--) {
-      padding.append(" ");
-    }
-
-    return padding.toString();
+    return " ".repeat(colPadding);
   }
 }

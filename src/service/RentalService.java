@@ -1,7 +1,7 @@
 package service;
 
-import database.Inventory;
-import database.MemberRegistry;
+import registry.Inventory;
+import registry.MemberRegistry;
 import entity.*;
 import lib.Input;
 
@@ -12,19 +12,19 @@ public class RentalService {
   MemberRegistry memberRegistry;
   List<Rental> rentals = new ArrayList<>();
 
-  RentalService(Inventory inventory, MemberRegistry memberRegistry) {
+  public RentalService(Inventory inventory, MemberRegistry memberRegistry) {
     this.inventory = inventory;
     this.memberRegistry = memberRegistry;
   }
 
-  public void displayBookVehicleView() {
+  public void displayRentVehicleView() {
     while (true) {
       System.out.println("\n");
-      System.out.println(":: Book vehicle");
+      System.out.println(":: Rent vehicle");
       System.out.println("=========================================");
 
       System.out.println("\nSelect an option.\n");
-      System.out.println("1. Show all vehicles\n2. Filter vehicles\n3. Book vehicle\n");
+      System.out.println("1. Show all vehicles\n2. Filter vehicles\n3. Choose vehicle\n");
 
       innerLoop:
       while (true) {
@@ -34,15 +34,19 @@ public class RentalService {
 
         switch (input) {
           case "1" -> {
-            displayAllVehicles(this.inventory.getList());
+            this.inventory.printInventory(this.inventory.getList());
             System.out.println("\nPress any key to continue.");
             scanner.nextLine();
             break innerLoop;
           }
           case "2" -> {
-            displayFilterView();
+            displayFilterVehiclesView();
             System.out.println("\nPress any key to continue.");
             scanner.nextLine();
+            break innerLoop;
+          }
+          case "3" -> {
+            displayChooseVehicleView();
             break innerLoop;
           }
           case Input.exit -> Input.maybeExit(input);
@@ -54,7 +58,7 @@ public class RentalService {
     }
   }
 
-  public void displayFilterView() {
+  public void displayFilterVehiclesView() {
     String explanation =
 """
 * ========================================================
@@ -96,7 +100,7 @@ public class RentalService {
             Map<String, String> filters = this.inventory.parseFilters(input);
             List<Item> items = this.inventory.filter(filters);
 
-            this.displayAllVehicles(items);
+            this.inventory.printInventory(items);
             break mainLoop;
           } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -104,21 +108,19 @@ public class RentalService {
         }
       }
     }
-
-    System.out.println("\nPress any key to continue.");
-    scanner.nextLine();
   }
 
-  public void displayBookingView() {
+  public void displayChooseVehicleView() {
     Scanner scanner = new Scanner(System.in);
     String input;
+    Item item;
+    Member member;
+    int duration;
 
+    loop:
     while (true) {
       System.out.println("Enter vehicle ID");
-      System.out.println("> ");
-
-      Item vehicle = null;
-      Member member = null;
+      System.out.print("> ");
 
       input = scanner.nextLine();
 
@@ -129,15 +131,29 @@ public class RentalService {
         }
         default -> {
           try {
-            vehicle = this.inventory.get(Integer.parseInt(input));
-          } catch (Exception e) {
-            if (e instanceof NumberFormatException) {
-              System.out.println("A vehicle with that ID does not exist.");
+            item = this.inventory.get(Integer.parseInt(input));
+
+            if (item == null) {
+              throw new Exception("No item with supplied ID.");
+            } else if (this.isBooked(item)) {
+              System.out.println("Vehicle is already booked. Please select another.");
+              break;
             }
+
+            break loop;
+          } catch (Exception e) {
+            // Matches if input cannot be parsed to an integer, or if the
+            // item cannot be found.
+            System.out.println("A vehicle with that ID does not exist.");
           }
         }
       }
+    }
 
+    loop:
+    while (true) {
+      System.out.println("Enter member ID");
+      System.out.print("> ");
       input = scanner.nextLine();
 
       switch (input.toLowerCase()) {
@@ -148,107 +164,93 @@ public class RentalService {
         default -> {
           try {
             member = this.memberRegistry.get(Integer.parseInt(input));
-          } catch (Exception e) {
-            if (e instanceof NumberFormatException) {
-              System.out.println("A member with that ID does not exist.");
+
+            if (member == null) {
+              throw new Exception("No member with supplied ID.");
             }
+
+            break loop;
+          } catch (Exception e) {
+            System.out.println("A member with that ID does not exist.");
           }
         }
       }
+    }
 
-      if (member != null && vehicle != null) {
-        Rental rental = new Rental(member, vehicle);
-        this.rentals.add(rental);
+    loop:
+    while (true) {
+      System.out.println("For how many days? (integer)");
+      System.out.print("> ");
+
+      input = scanner.nextLine();
+
+      switch (input.toLowerCase()) {
+        case Input.exit -> Input.maybeExit(input);
+        case Input.back -> {
+          return;
+        }
+        default -> {
+          try {
+            duration = Integer.parseInt(input);
+            break loop;
+          } catch (Exception e) {
+            System.out.println("Please enter an integer.");
+          }
+        }
+      }
+    }
+
+    Rental rental = new Rental(member, item, duration);
+    this.rentals.add(rental);
+
+    System.out.println("\nPress any key to continue.");
+    scanner.nextLine();
+  }
+
+  public void displayEndBookingView() {
+    Scanner scanner = new Scanner(System.in);
+
+    mainLoop:
+    while (true) {
+      System.out.println("1. List bookings");
+      System.out.println("2. End booking\n");
+      System.out.print("> ");
+
+      String input = scanner.nextLine();
+
+      switch (input.toLowerCase()) {
+        case Input.exit -> Input.maybeExit(input);
+        case Input.back -> {
+          return;
+        }
+        case "1" -> {
+          this.printBookings(this.rentals);
+        }
+        case "2" -> {}
       }
     }
   }
 
-  public void displayAllVehicles(List<Item> items) {
-    int colIdWidth = 2;
-    int colTypeWidth = 4;
-    int colBrandWidth = 5;
-    int colModelWidth = 5;
-    int colConfigWidth = 13;
-    int colAvailableWidth = 9;
+  public void printBookings(List<Rental> bookings) {
+    System.out.println("Id\tMemberId\tItemId\tBooked\t\tEnded");
+    System.out.println("---------------------------------------------------------------");
 
-    for (Item item : items) {
-      colIdWidth = Math.max(String.valueOf(item.getId()).length(), colIdWidth);
-      colTypeWidth = Math.max(item.getType().toString().length(), colTypeWidth);
-      colBrandWidth = Math.max(item.getBrand().length(), colBrandWidth);
-      colModelWidth = Math.max(item.getModel().length(), colModelWidth);
-      colAvailableWidth = Math.max(String.valueOf(item.isAvailable()).length(), colAvailableWidth);
-
-      if (item instanceof Car) {
-        colConfigWidth = Math.max(((Car) item).getCarType().toString().length(), colConfigWidth);
-      } else if (item instanceof Motorcycle) {
-        colConfigWidth =
-            Math.max(((Motorcycle) item).getMotorCycleType().toString().length(), colConfigWidth);
-      }
-    }
-
-    String header =
-        "Id"
-            + this.getColPadding(this.getColPaddingLength(colIdWidth, 2))
-            + "Type"
-            + this.getColPadding(this.getColPaddingLength(colTypeWidth, 4))
-            + "Brand"
-            + this.getColPadding(this.getColPaddingLength(colBrandWidth, 5))
-            + "Model"
-            + this.getColPadding(this.getColPaddingLength(colModelWidth, 5))
-            + "Configuration"
-            + this.getColPadding(this.getColPaddingLength(colConfigWidth, 13))
-            + "Available"
-            + this.getColPadding(this.getColPaddingLength(colAvailableWidth, 9));
-
-    System.out.println(header);
-    System.out.println("-".repeat(header.length()));
-
-    for (Item item : items) {
-      int idLen = String.valueOf(item.getId()).length();
-      int typeLen = item.getType().toString().length();
-      int brandLen = item.getBrand().length();
-      int modelLen = item.getModel().length();
-      int configLen = 0;
-      int availableLen = String.valueOf(item.isAvailable()).length();
-
-      String vehicleClass = "";
-
-      if (item instanceof Car) {
-        vehicleClass = ((Car) item).getCarType().toString();
-        configLen = ((Car) item).getCarType().toString().length();
-      } else if (item instanceof Motorcycle) {
-        vehicleClass = ((Motorcycle) item).getMotorCycleType().toString();
-        configLen = ((Motorcycle) item).getMotorCycleType().toString().length();
-      }
-
+    for (Rental booking : bookings) {
       System.out.printf(
-          "%s"
-              + this.getColPadding(this.getColPaddingLength(colIdWidth, idLen))
-              + "%s"
-              + this.getColPadding(this.getColPaddingLength(colTypeWidth, typeLen))
-              + "%s"
-              + this.getColPadding(this.getColPaddingLength(colBrandWidth, brandLen))
-              + "%s"
-              + this.getColPadding(this.getColPaddingLength(colModelWidth, modelLen))
-              + "%s"
-              + this.getColPadding(this.getColPaddingLength(colConfigWidth, configLen))
-              + "%s"
-              + this.getColPadding(this.getColPaddingLength(colAvailableWidth, availableLen))
-              + "\n",
-          item.getId(),
-          item.getType(),
-          item.getBrand(),
-          item.getModel(),
-          vehicleClass,
-          item.isAvailable());
+          booking.getId()
+              + "\t"
+              + booking.getMember().getId()
+              + "\t\t\t"
+              + booking.getItem().getId()
+              + "\t\t"
+              + booking.getStarted()
+              + "\t"
+              + booking.getEnded()
+              + "\n");
     }
   }
 
-  public int getColPaddingLength(int colLength, int valueLength) {
-    return valueLength < colLength ? colLength - valueLength + 2 : 2;
-  }
-
-  public String getColPadding(int colPadding) {
-    return " ".repeat(colPadding);
+  public boolean isBooked(Item item) {
+    return this.rentals.stream().anyMatch((rental) -> rental.getItem().getId() == item.getId());
   }
 }

@@ -1,6 +1,6 @@
 package service;
 
-import database.MemberRegistry;
+import registry.MemberRegistry;
 import entity.Member;
 import entity.MembershipLevel;
 import lib.Input;

@@ -1,18 +1,18 @@
 package entity;
 
 public interface PricePolicy {
-  default double getMembershipFee(MembershipLevel status) {
+  default double getMembershipFee(MembershipLevel status, int daysRented) {
     return switch (status) {
-      case BRONZE -> this.getBronzeMembershipFee();
-      case SILVER -> this.getSilverMembershipFee();
-      case GOLD -> this.getGoldMembershipFee();
+      case BRONZE -> this.getBronzeMembershipFee(daysRented);
+      case SILVER -> this.getSilverMembershipFee(daysRented);
+      case GOLD -> this.getGoldMembershipFee(daysRented);
       case null -> 0;
     };
   }
 
-  double getBronzeMembershipFee();
+  double getBronzeMembershipFee(int daysRented);
 
-  double getSilverMembershipFee();
+  double getSilverMembershipFee(int daysRented);
 
-  double getGoldMembershipFee();
+  double getGoldMembershipFee(int daysRented);
 }

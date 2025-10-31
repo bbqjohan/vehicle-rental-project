@@ -6,7 +6,7 @@ public class Member {
   private final int id;
   private String name;
   private MembershipLevel level;
-  private List history;
+  private List<Rental> history;
 
   public Member(int id, String name, MembershipLevel level, List history) {
     this.name = name;
@@ -24,11 +24,11 @@ public class Member {
   }
 
   public int getId() {
-    return id;
+    return this.id;
   }
 
   public String getName() {
-    return name;
+    return this.name;
   }
 
   public void setName(String name) {
@@ -36,26 +36,18 @@ public class Member {
   }
 
   public MembershipLevel getLevel() {
-    return level;
+    return this.level;
   }
 
   public void setLevel(MembershipLevel level) {
     this.level = level;
   }
 
-  public List getHistory() {
-    return history;
+  public List<Rental> getHistory() {
+    return this.history;
   }
 
-  public void setHistory(List history) {
-    this.history = history;
-  }
-
-  public void display() {
-    String[] str = new String[] {"Id\tLevel\tName", this.id + "\t" + this.level + "\t" + this.name};
-
-    for (String line : str) {
-      System.out.println(line);
-    }
+  public void addHistory(Rental rental) {
+    this.history.add(rental);
   }
 }

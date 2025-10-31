@@ -13,17 +13,17 @@ public class Car extends Item {
   }
 
   @Override
-  public double getBronzeMembershipFee() {
-    return 50;
+  public double getBronzeMembershipFee(int daysRented) {
+    return 50 * daysRented;
   }
 
   @Override
-  public double getSilverMembershipFee() {
-    return 40;
+  public double getSilverMembershipFee(int daysRented) {
+    return 40 * daysRented;
   }
 
   @Override
-  public double getGoldMembershipFee() {
-    return 23;
+  public double getGoldMembershipFee(int daysRented) {
+    return 23 * daysRented;
   }
 }

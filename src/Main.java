@@ -1,5 +1,5 @@
-import database.Inventory;
-import database.MemberRegistry;
+import registry.Inventory;
+import registry.MemberRegistry;
 import entity.*;
 import lib.Input;
 import service.MembershipService;
@@ -59,9 +59,10 @@ public class Main {
       memberRegistry.add(member);
     }
 
-    //    startMenu(inventory, memberRegistry);
-    //    new service.RentalService(inventory).displayAllVehicles(inventory.getList());
-    new RentalService(inventory, memberRegistry).displayBookingView();
+    startMenu(inventory, memberRegistry);
+    //    new service.RentalService(inventory).printInventory(inventory.getList());
+    //    var service = new RentalService(inventory, memberRegistry);
+    //    service.displayChooseVehicleView();
   }
 
   static void startMenu(Inventory inventory, MemberRegistry memberRegistry) {

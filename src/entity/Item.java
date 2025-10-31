@@ -3,10 +3,10 @@ package entity;
 public abstract class Item implements PricePolicy {
   private int id;
   private boolean available;
-  private VehicleType type;
-  private String color;
-  private String brand;
-  private String model;
+  private final VehicleType type;
+  private final String color;
+  private final String brand;
+  private final String model;
 
   public Item(
       int id, VehicleType type, String color, String brand, String model, boolean available) {

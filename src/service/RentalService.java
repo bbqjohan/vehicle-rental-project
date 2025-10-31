@@ -4,17 +4,20 @@ import registry.Inventory;
 import registry.MemberRegistry;
 import entity.*;
 import lib.Input;
+import registry.RentalRegistry;
 
 import java.util.*;
 
 public class RentalService {
   Inventory inventory;
   MemberRegistry memberRegistry;
-  List<Rental> rentals = new ArrayList<>();
+  RentalRegistry rentalRegistry;
 
-  public RentalService(Inventory inventory, MemberRegistry memberRegistry) {
+  public RentalService(
+      Inventory inventory, MemberRegistry memberRegistry, RentalRegistry rentalRegistry) {
     this.inventory = inventory;
     this.memberRegistry = memberRegistry;
+    this.rentalRegistry = rentalRegistry;
   }
 
   public void displayRentVehicleView() {
@@ -24,7 +27,8 @@ public class RentalService {
       System.out.println("=========================================");
 
       System.out.println("\nSelect an option.\n");
-      System.out.println("1. Show all vehicles\n2. Filter vehicles\n3. Choose vehicle\n");
+      System.out.println(
+          "1. Show all vehicles\n2. Filter vehicles\n3. Choose vehicle\n4. Return vehicle");
 
       innerLoop:
       while (true) {
@@ -33,6 +37,10 @@ public class RentalService {
         String input = scanner.nextLine();
 
         switch (input) {
+          case Input.exit -> Input.maybeExit(input);
+          case Input.back -> {
+            return;
+          }
           case "1" -> {
             this.inventory.printInventory(this.inventory.getList());
             System.out.println("\nPress any key to continue.");
@@ -49,9 +57,9 @@ public class RentalService {
             displayChooseVehicleView();
             break innerLoop;
           }
-          case Input.exit -> Input.maybeExit(input);
-          case Input.back -> {
-            return;
+          case "4" -> {
+            displayEndRentalView();
+            break innerLoop;
           }
         }
       }
@@ -135,7 +143,7 @@ public class RentalService {
 
             if (item == null) {
               throw new Exception("No item with supplied ID.");
-            } else if (this.isBooked(item)) {
+            } else if (this.rentalRegistry.isRented(item)) {
               System.out.println("Vehicle is already booked. Please select another.");
               break;
             }
@@ -201,22 +209,25 @@ public class RentalService {
     }
 
     Rental rental = new Rental(member, item, duration);
-    this.rentals.add(rental);
+    this.rentalRegistry.add(rental);
+    item.setAvailable(false);
 
     System.out.println("\nPress any key to continue.");
     scanner.nextLine();
   }
 
-  public void displayEndBookingView() {
+  public void displayEndRentalView() {
     Scanner scanner = new Scanner(System.in);
+    String input;
+    Rental rental;
 
     mainLoop:
     while (true) {
-      System.out.println("1. List bookings");
-      System.out.println("2. End booking\n");
+      System.out.println("1. List rentals");
+      System.out.println("2. End rental\n");
       System.out.print("> ");
 
-      String input = scanner.nextLine();
+      input = scanner.nextLine();
 
       switch (input.toLowerCase()) {
         case Input.exit -> Input.maybeExit(input);
@@ -224,33 +235,36 @@ public class RentalService {
           return;
         }
         case "1" -> {
-          this.printBookings(this.rentals);
+          this.rentalRegistry.print(this.rentalRegistry.getList());
         }
-        case "2" -> {}
+        case "2" -> {
+          while (true) {
+            System.out.println("Enter rental ID");
+            System.out.print("> ");
+            input = scanner.nextLine();
+
+            try {
+              rental = this.rentalRegistry.get(Integer.parseInt(input));
+
+              if (rental == null) {
+                throw new Exception("No rental with supplied ID.");
+              }
+
+              rental.end();
+              rental.getMember().addHistoryEntry(rental);
+              rental.getItem().setAvailable(true);
+
+              break mainLoop;
+            } catch (Exception e) {
+              if (e instanceof NumberFormatException) {
+                System.out.println("Please enter an integer.");
+              } else {
+                System.out.println(e.getMessage());
+              }
+            }
+          }
+        }
       }
     }
-  }
-
-  public void printBookings(List<Rental> bookings) {
-    System.out.println("Id\tMemberId\tItemId\tBooked\t\tEnded");
-    System.out.println("---------------------------------------------------------------");
-
-    for (Rental booking : bookings) {
-      System.out.printf(
-          booking.getId()
-              + "\t"
-              + booking.getMember().getId()
-              + "\t\t\t"
-              + booking.getItem().getId()
-              + "\t\t"
-              + booking.getStarted()
-              + "\t"
-              + booking.getEnded()
-              + "\n");
-    }
-  }
-
-  public boolean isBooked(Item item) {
-    return this.rentals.stream().anyMatch((rental) -> rental.getItem().getId() == item.getId());
   }
 }

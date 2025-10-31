@@ -10,6 +10,7 @@ public class Rental {
   private final int duration;
   private LocalDate started;
   private LocalDate ended;
+  private double fee = 0;
 
   public Rental(Member member, Item item, int duration) {
     this.member = member;
@@ -26,7 +27,12 @@ public class Rental {
   public void end() {
     if (this.ended == null) {
       this.ended = this.started.plusDays(this.duration);
+      this.fee = this.item.getMembershipFee(this.member.getLevel(), this.duration);
     }
+  }
+
+  public int getDuration() {
+    return this.duration;
   }
 
   public LocalDate getStarted() {

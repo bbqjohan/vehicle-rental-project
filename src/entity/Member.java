@@ -1,17 +1,18 @@
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Member {
   private final int id;
   private String name;
   private MembershipLevel level;
-  private List<Rental> history;
+  private final List<Rental> history;
 
-  public Member(int id, String name, MembershipLevel level, List history) {
+  public Member(int id, String name, MembershipLevel level, List<Rental> history) {
     this.name = name;
     this.level = level;
-    this.history = history;
+    this.history = history == null ? new ArrayList<>() : history;
     this.id = id;
   }
 
@@ -47,7 +48,7 @@ public class Member {
     return this.history;
   }
 
-  public void addHistory(Rental rental) {
+  public void addHistoryEntry(Rental rental) {
     this.history.add(rental);
   }
 }

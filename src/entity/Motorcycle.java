@@ -1,7 +1,7 @@
 package entity;
 
 public class Motorcycle extends Item {
-  private MotorcycleType motorcycleType;
+  private final MotorcycleType motorcycleType;
 
   public Motorcycle(
       String color, String brand, String model, MotorcycleType carType, boolean available) {
@@ -14,17 +14,17 @@ public class Motorcycle extends Item {
   }
 
   @Override
-  public double getBronzeMembershipFee() {
-    return 50;
+  public double getBronzeMembershipFee(int duration) {
+    return 50 * duration;
   }
 
   @Override
-  public double getSilverMembershipFee() {
-    return 40;
+  public double getSilverMembershipFee(int duration) {
+    return 40 * duration;
   }
 
   @Override
-  public double getGoldMembershipFee() {
-    return 23;
+  public double getGoldMembershipFee(int duration) {
+    return 23 * duration;
   }
 }

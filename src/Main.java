@@ -2,6 +2,7 @@ import registry.Inventory;
 import registry.MemberRegistry;
 import entity.*;
 import lib.Input;
+import registry.RentalRegistry;
 import service.MembershipService;
 import service.RentalService;
 
@@ -59,13 +60,16 @@ public class Main {
       memberRegistry.add(member);
     }
 
-    startMenu(inventory, memberRegistry);
+    RentalRegistry rentalRegistry = new RentalRegistry();
+
+    startMenu(inventory, memberRegistry, rentalRegistry);
     //    new service.RentalService(inventory).printInventory(inventory.getList());
     //    var service = new RentalService(inventory, memberRegistry);
     //    service.displayChooseVehicleView();
   }
 
-  static void startMenu(Inventory inventory, MemberRegistry memberRegistry) {
+  static void startMenu(
+      Inventory inventory, MemberRegistry memberRegistry, RentalRegistry rentalRegistry) {
     System.out.println(
         "=========================================================================================");
     System.out.println("Welcome to Vehicle Rentals!");
@@ -76,7 +80,7 @@ public class Main {
 
     Scanner scanner = new Scanner(System.in);
     MembershipService membershipService = new MembershipService(memberRegistry);
-    RentalService rentalService = new RentalService(inventory, memberRegistry);
+    RentalService rentalService = new RentalService(inventory, memberRegistry, rentalRegistry);
 
     while (true) {
       System.out.println("\nPlease select an option below.\n");

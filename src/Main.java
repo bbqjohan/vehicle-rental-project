@@ -86,11 +86,11 @@ public class Main {
             System.out.println("\nPlease select an option below.\n");
             System.out.println("Type \"exit\" at any point to exit the application.");
             System.out.println("Type \"back\" to go back to a previous menu\n");
-            System.out.println("Members\t\t\t\tBooking");
+            System.out.println("Members\t\t\t\tRental service");
             System.out.println("----------------    -------------------");
             System.out.println("1. Add member\t\t4. Book vehicle");
             System.out.println("2. Find member\t\t5. Return vehicle");
-            System.out.println("3. Update member");
+            System.out.println("3. Update member\t6. View profits");
             System.out.println();
 
             innerLoop:
@@ -121,6 +121,10 @@ public class Main {
                     }
                     case "5" -> {
                         rentalService.displayEndRentalView();
+                        break innerLoop;
+                    }
+                    case "6" -> {
+                        rentalService.displayProfitsView();
                         break innerLoop;
                     }
                 }

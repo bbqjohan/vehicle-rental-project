@@ -22,7 +22,9 @@ public class RentalRegistry {
 
     public boolean isRented(Item item) {
         return this.getList().stream()
-                .anyMatch((rental) -> rental.getItem().getId() == item.getId());
+                .anyMatch(
+                        (rental) ->
+                                rental.getItem().getId() == item.getId() && !item.isAvailable());
     }
 
     public List<Rental> getList() {
@@ -30,7 +32,7 @@ public class RentalRegistry {
     }
 
     public void print(List<Rental> rentals) {
-        System.out.println("Id\tMemberId\tItemId\tDays\tBooked\t\tEnded");
+        System.out.println("Id\tMemberId\tItemId\tDays\tRented\t\tEnded");
         System.out.println("---------------------------------------------------------------");
 
         for (Rental booking : rentals) {
@@ -40,7 +42,7 @@ public class RentalRegistry {
                             + booking.getMember().getId()
                             + "\t\t\t"
                             + booking.getItem().getId()
-                            + "\t"
+                            + "\t\t"
                             + booking.getDuration()
                             + "\t\t"
                             + booking.getStarted()
@@ -48,5 +50,12 @@ public class RentalRegistry {
                             + booking.getEnded()
                             + "\n");
         }
+    }
+
+    public double getProfits() {
+        return this.getList().stream()
+                .filter((r) -> r.getEnded() != null)
+                .map(Rental::getFee)
+                .reduce(0d, Double::sum);
     }
 }

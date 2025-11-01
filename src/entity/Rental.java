@@ -50,4 +50,8 @@ public class Rental {
     public Item getItem() {
         return this.item;
     }
+
+    public double getFee() {
+        return this.fee;
+    }
 }

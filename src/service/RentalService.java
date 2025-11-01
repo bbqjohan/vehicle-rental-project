@@ -195,7 +195,12 @@ public class RentalService {
                 default -> {
                     try {
                         duration = Integer.parseInt(input);
-                        break loop;
+
+                        if (duration < 1) {
+                            System.out.println("Invalid duration. Must be more than 0.");
+                        } else {
+                            break loop;
+                        }
                     } catch (Exception e) {
                         System.out.println("Please enter an integer.");
                     }
@@ -247,6 +252,10 @@ public class RentalService {
                             rental.getMember().addHistoryEntry(rental);
                             rental.getItem().setAvailable(true);
 
+                            System.out.println("\nSuccess!");
+                            System.out.println("Press any key to continue.");
+                            scanner.nextLine();
+
                             break mainLoop;
                         } catch (Exception e) {
                             if (e instanceof NumberFormatException) {
@@ -259,5 +268,14 @@ public class RentalService {
                 }
             }
         }
+    }
+
+    public void displayProfitsView() {
+        Scanner scanner = new Scanner(System.in);
+        double profits = this.rentalRegistry.getProfits();
+
+        System.out.println("\nTotal amount of collected fees from rentals: " + profits);
+        System.out.println("\nPress any key to continue.");
+        scanner.nextLine();
     }
 }

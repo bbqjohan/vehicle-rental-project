@@ -63,9 +63,6 @@ public class Main {
         RentalRegistry rentalRegistry = new RentalRegistry();
 
         startMenu(inventory, memberRegistry, rentalRegistry);
-        //    new service.RentalService(inventory).printInventory(inventory.getList());
-        //    var service = new RentalService(inventory, memberRegistry);
-        //    service.displayChooseVehicleView();
     }
 
     static void startMenu(
@@ -79,7 +76,7 @@ public class Main {
                 "=========================================================================================");
 
         Scanner scanner = new Scanner(System.in);
-        MembershipService membershipService = new MembershipService(memberRegistry);
+        MembershipService membershipService = new MembershipService(memberRegistry, rentalRegistry);
         RentalService rentalService = new RentalService(inventory, memberRegistry, rentalRegistry);
 
         while (true) {
@@ -88,9 +85,11 @@ public class Main {
             System.out.println("Type \"back\" to go back to a previous menu\n");
             System.out.println("Members\t\t\t\tRental service");
             System.out.println("----------------    -------------------");
-            System.out.println("1. Add member\t\t4. Book vehicle");
-            System.out.println("2. Find member\t\t5. Return vehicle");
-            System.out.println("3. Update member\t6. View profits");
+            System.out.println("1. Add member\t\t6. Book vehicle");
+            System.out.println("2. Find member\t\t7. Return vehicle");
+            System.out.println("3. Update member\t8. View profits");
+            System.out.println("4. List members\t\t9. List vehicles");
+            System.out.println("5. View history");
             System.out.println();
 
             innerLoop:
@@ -99,7 +98,7 @@ public class Main {
                 String input = scanner.nextLine();
 
                 switch (input.toLowerCase()) {
-                    case Input.exit -> System.exit(0);
+                    case Input.exit -> Input.maybeExit(input);
                     case Input.back -> {
                         return;
                     }
@@ -116,15 +115,33 @@ public class Main {
                         break innerLoop;
                     }
                     case "4" -> {
-                        rentalService.displayRentVehicleView();
+                        memberRegistry.print(memberRegistry.getList());
+                        System.out.println("\nPress any key to continue.");
+                        scanner.nextLine();
                         break innerLoop;
                     }
                     case "5" -> {
-                        rentalService.displayEndRentalView();
+                        membershipService.listMemberHistory();
+                        System.out.println("\nPress any key to continue.");
+                        scanner.nextLine();
                         break innerLoop;
                     }
                     case "6" -> {
+                        rentalService.displayRentVehicleView();
+                        break innerLoop;
+                    }
+                    case "7" -> {
+                        rentalService.displayEndRentalView();
+                        break innerLoop;
+                    }
+                    case "8" -> {
                         rentalService.displayProfitsView();
+                        break innerLoop;
+                    }
+                    case "9" -> {
+                        rentalRegistry.print(rentalRegistry.getList());
+                        System.out.println("Press any key to continue.");
+                        scanner.nextLine();
                         break innerLoop;
                     }
                 }

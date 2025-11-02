@@ -4,16 +4,19 @@ import registry.MemberRegistry;
 import entity.Member;
 import entity.MembershipLevel;
 import lib.Input;
+import registry.RentalRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class MembershipService {
-    private MemberRegistry registry = new MemberRegistry();
+    private final MemberRegistry memberRegistry;
+    private final RentalRegistry rentalRegistry;
 
-    public MembershipService(MemberRegistry registry) {
-        this.registry = registry;
+    public MembershipService(MemberRegistry memberRegistry, RentalRegistry rentalRegistry) {
+        this.memberRegistry = memberRegistry;
+        this.rentalRegistry = rentalRegistry;
     }
 
     public void displayAddMemberView() {
@@ -23,7 +26,8 @@ public class MembershipService {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Name: ");
+        System.out.println("Name");
+        System.out.print("> ");
         String name = scanner.nextLine();
 
         Input.maybeExit(name);
@@ -35,7 +39,8 @@ public class MembershipService {
         MembershipLevel level = null;
 
         while (level == null) {
-            System.out.print("Membership level (bronze, silver, gold): ");
+            System.out.println("Membership level (bronze, silver, gold)");
+            System.out.print("> ");
             String input = scanner.nextLine();
 
             Input.maybeExit(input);
@@ -47,7 +52,7 @@ public class MembershipService {
             level = MembershipLevel.from(input);
         }
 
-        this.registry.add(new Member(name, level, null));
+        this.memberRegistry.add(new Member(name, level, null));
 
         System.out.printf("\n-- New member \"%s\" registered! --%n", name);
         System.out.println("Press any key to continue");
@@ -64,7 +69,8 @@ public class MembershipService {
         List<Member> members = new ArrayList<>();
 
         while (members.isEmpty()) {
-            System.out.print("Name: ");
+            System.out.println("Name");
+            System.out.print("> ");
             String input = scanner.nextLine();
 
             Input.maybeExit(input);
@@ -73,7 +79,7 @@ public class MembershipService {
                 return;
             }
 
-            members = this.registry.getByName(input);
+            members = this.memberRegistry.getByName(input);
 
             if (members.isEmpty()) {
                 System.out.println("A member with that name couldn't be found.");
@@ -81,7 +87,7 @@ public class MembershipService {
         }
 
         System.out.println();
-        this.registry.print(members);
+        this.memberRegistry.print(members);
         System.out.println("\nPress any key to continue.");
         scanner.nextLine();
     }
@@ -95,7 +101,8 @@ public class MembershipService {
         Member member = null;
 
         while (member == null) {
-            System.out.print("Id: ");
+            System.out.println("Id");
+            System.out.print("> ");
             String input = scanner.nextLine();
 
             Input.maybeExit(input);
@@ -109,10 +116,10 @@ public class MembershipService {
             try {
                 id = Integer.parseInt(input);
             } catch (Exception e) {
-                // Do nothing.
+                System.out.println("Id must be an integer.");
             }
 
-            member = this.registry.get(id);
+            member = this.memberRegistry.get(id);
 
             if (member == null) {
                 System.out.println("A member with that ID couldn't be found.");
@@ -138,7 +145,8 @@ public class MembershipService {
             while (true) {
                 if (input.equals("1")) {
                     System.out.println("\nCurrent name: " + member.getName());
-                    System.out.print("New name: ");
+                    System.out.println("New name");
+                    System.out.print("> ");
 
                     input = scanner.nextLine();
 
@@ -153,7 +161,8 @@ public class MembershipService {
                     break;
                 } else if (input.equals("2")) {
                     System.out.println("\nCurrent membership level: " + member.getLevel());
-                    System.out.print("New level (bronze, silver, gold): ");
+                    System.out.print("New level (bronze, silver, gold)");
+                    System.out.print("> ");
                     input = scanner.nextLine();
 
                     Input.maybeExit(input);
@@ -177,7 +186,40 @@ public class MembershipService {
         }
     }
 
-    public boolean hasUserExited(String input) {
-        return input.equalsIgnoreCase("exit");
+    public void listMemberHistory() {
+        //        System.out.println("\n");
+        //        System.out.println(":: Update member information");
+        //        System.out.println("=========================================");
+
+        Scanner scanner = new Scanner(System.in);
+        Member member = null;
+
+        while (member == null) {
+            System.out.println("Id");
+            System.out.print("> ");
+            String input = scanner.nextLine();
+
+            Input.maybeExit(input);
+
+            if (Input.isBack(input)) {
+                return;
+            }
+
+            int id = -1;
+
+            try {
+                id = Integer.parseInt(input);
+            } catch (Exception e) {
+                System.out.println("Id must be an integer.");
+            }
+
+            member = this.memberRegistry.get(id);
+
+            if (member == null) {
+                System.out.println("A member with that ID couldn't be found.");
+            }
+        }
+
+        this.rentalRegistry.print(member.getHistory());
     }
 }

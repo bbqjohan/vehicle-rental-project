@@ -116,12 +116,11 @@ public class RentalService {
     public void displayChooseVehicleView() {
         Scanner scanner = new Scanner(System.in);
         String input;
-        Item item;
-        Member member;
+        Item item = null;
+        Member member = null;
         int duration;
 
-        loop:
-        while (true) {
+        while (item == null) {
             System.out.println("Enter vehicle ID");
             System.out.print("> ");
 
@@ -132,29 +131,23 @@ public class RentalService {
                 case Input.back -> {
                     return;
                 }
-                default -> {
-                    try {
-                        item = this.inventory.get(Integer.parseInt(input));
+            }
 
-                        if (item == null) {
-                            throw new Exception("No item with supplied ID.");
-                        } else if (this.rentalRegistry.isRented(item)) {
-                            System.out.println("Vehicle is already booked. Please select another.");
-                            break;
-                        }
+            try {
+                item = this.inventory.get(Integer.parseInt(input));
 
-                        break loop;
-                    } catch (Exception e) {
-                        // Matches if input cannot be parsed to an integer, or if the
-                        // item cannot be found.
-                        System.out.println("A vehicle with that ID does not exist.");
-                    }
+                if (item == null) {
+                    System.out.println("A vehicle with that ID does not exist.");
+                } else if (this.rentalRegistry.isRented(item)) {
+                    System.out.println("Vehicle is already booked. Please select another.");
+                    item = null;
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Please provide an integer for the item id.");
             }
         }
 
-        loop:
-        while (true) {
+        while (member == null) {
             System.out.println("Enter member ID");
             System.out.print("> ");
             input = scanner.nextLine();
@@ -164,23 +157,19 @@ public class RentalService {
                 case Input.back -> {
                     return;
                 }
-                default -> {
-                    try {
-                        member = this.memberRegistry.get(Integer.parseInt(input));
+            }
 
-                        if (member == null) {
-                            throw new Exception("No member with supplied ID.");
-                        }
+            try {
+                member = this.memberRegistry.get(Integer.parseInt(input));
 
-                        break loop;
-                    } catch (Exception e) {
-                        System.out.println("A member with that ID does not exist.");
-                    }
+                if (member == null) {
+                    System.out.println("A member with that ID does not exist.");
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Please provide an integer for the member id.");
             }
         }
 
-        loop:
         while (true) {
             System.out.println("For how many days? (integer)");
             System.out.print("> ");
@@ -192,25 +181,25 @@ public class RentalService {
                 case Input.back -> {
                     return;
                 }
-                default -> {
-                    try {
-                        duration = Integer.parseInt(input);
+            }
 
-                        if (duration < 1) {
-                            System.out.println("Invalid duration. Must be more than 0.");
-                        } else {
-                            break loop;
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Please enter an integer.");
-                    }
+            try {
+                duration = Integer.parseInt(input);
+
+                if (duration < 1) {
+                    System.out.println("Invalid duration. Must be more than 0.");
+                } else {
+                    break;
                 }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter an integer.");
             }
         }
 
         Rental rental = new Rental(member, item, duration);
         this.rentalRegistry.add(rental);
         item.setAvailable(false);
+        member.addHistoryEntry(rental);
 
         System.out.println("\nPress any key to continue.");
         scanner.nextLine();
@@ -219,7 +208,7 @@ public class RentalService {
     public void displayEndRentalView() {
         Scanner scanner = new Scanner(System.in);
         String input;
-        Rental rental;
+        Rental rental = null;
 
         mainLoop:
         while (true) {
@@ -249,7 +238,6 @@ public class RentalService {
                             }
 
                             rental.end();
-                            rental.getMember().addHistoryEntry(rental);
                             rental.getItem().setAvailable(true);
 
                             System.out.println("\nSuccess!");

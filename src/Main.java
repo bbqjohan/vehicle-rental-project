@@ -17,9 +17,9 @@ public class Main {
                     new Car("Red", "Audi", "S3", CarType.SEDAN, true),
                     new Car("White", "Honda", "Accord", CarType.SEDAN, true),
                     new Car("Black", "Toyota", "Crown", CarType.SEDAN, true),
-                    new Car("White", "Tesla", "Model Y", CarType.SUV, false),
+                    new Car("White", "Tesla", "Model Y", CarType.SUV, true),
                     new Car("White", "Ford", "Explorer", CarType.SUV, true),
-                    new Car("White", "Ford", "Bronco", CarType.SUV, false),
+                    new Car("White", "Ford", "Bronco", CarType.SUV, true),
                     new Car("Blue", "Fiat", "500", CarType.COMPACT, true),
                     new Car("Red", "Volkswagen", "Golf", CarType.COMPACT, true),
                     new Car("Black", "Toyota", "Corolla", CarType.COMPACT, true),
@@ -139,8 +139,8 @@ public class Main {
                         break innerLoop;
                     }
                     case "9" -> {
-                        rentalRegistry.print(rentalRegistry.getList());
-                        System.out.println("Press any key to continue.");
+                        inventory.printInventory(inventory.getList());
+                        System.out.println("\nPress any key to continue.");
                         scanner.nextLine();
                         break innerLoop;
                     }

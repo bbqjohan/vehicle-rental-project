@@ -4,24 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Member {
+    private static int idCount = 0;
     private final int id;
     private String name;
     private MembershipLevel level;
     private final List<Rental> history;
 
-    public Member(int id, String name, MembershipLevel level, List<Rental> history) {
+    public Member(String name, MembershipLevel level, List<Rental> history) {
         this.name = name;
         this.level = level;
         this.history = history == null ? new ArrayList<>() : history;
-        this.id = id;
-    }
-
-    public Member(String name, MembershipLevel level) {
-        this(-1, name, level, null);
-    }
-
-    public Member(Member member) {
-        this(member.id, member.name, member.level, member.history);
+        this.id = idCount++;
     }
 
     public int getId() {

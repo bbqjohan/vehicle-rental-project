@@ -47,11 +47,11 @@ public class Main {
         }
 
         Member[] members = {
-            new Member("Bosse", MembershipLevel.BRONZE),
-            new Member("Sara", MembershipLevel.SILVER),
-            new Member("Emil", MembershipLevel.GOLD),
-            new Member("Bosse", MembershipLevel.BRONZE),
-            new Member("Jennifer", MembershipLevel.SILVER),
+            new Member("Bosse", MembershipLevel.BRONZE, null),
+            new Member("Sara", MembershipLevel.SILVER, null),
+            new Member("Emil", MembershipLevel.GOLD, null),
+            new Member("Bosse", MembershipLevel.BRONZE, null),
+            new Member("Jennifer", MembershipLevel.SILVER, null),
         };
 
         MemberRegistry memberRegistry = new MemberRegistry();

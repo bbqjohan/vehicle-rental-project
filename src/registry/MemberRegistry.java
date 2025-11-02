@@ -5,7 +5,6 @@ import entity.Member;
 import java.util.*;
 
 public class MemberRegistry {
-    private int idCount = 0;
     private final Map<Integer, Member> members = new TreeMap<>();
 
     public void add(Member member) {
@@ -13,36 +12,11 @@ public class MemberRegistry {
             return;
         }
 
-        this.members.put(
-                idCount,
-                new Member(idCount, member.getName(), member.getLevel(), member.getHistory()));
-
-        idCount++;
-    }
-
-    public boolean has(int id) {
-        return this.members.containsKey(id);
-    }
-
-    public void set(Member member) {
-        if (member == null || !has(member.getId())) {
-            return;
-        }
-
-        this.members.put(
-                member.getId(),
-                new Member(
-                        member.getId(), member.getName(), member.getLevel(), member.getHistory()));
+        this.members.put(member.getId(), member);
     }
 
     public Member get(int id) {
-        Member member = this.members.get(id);
-
-        if (member != null) {
-            member = new Member(member);
-        }
-
-        return member;
+        return this.members.get(id);
     }
 
     public List<Member> getList() {
@@ -61,7 +35,7 @@ public class MemberRegistry {
         return members;
     }
 
-    public void listMembers(List<Member> members) {
+    public void print(List<Member> members) {
         System.out.println("Id\tLevel\tName");
         System.out.println("--------------------------------");
 

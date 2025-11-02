@@ -47,7 +47,7 @@ public class MembershipService {
             level = MembershipLevel.from(input);
         }
 
-        this.registry.add(new Member(name, level));
+        this.registry.add(new Member(name, level, null));
 
         System.out.printf("\n-- New member \"%s\" registered! --%n", name);
         System.out.println("Press any key to continue");
@@ -81,7 +81,7 @@ public class MembershipService {
         }
 
         System.out.println();
-        this.registry.listMembers(members);
+        this.registry.print(members);
         System.out.println("\nPress any key to continue.");
         scanner.nextLine();
     }
@@ -149,7 +149,6 @@ public class MembershipService {
                     }
 
                     member.setName(input);
-                    this.registry.set(member);
 
                     break;
                 } else if (input.equals("2")) {
@@ -171,7 +170,6 @@ public class MembershipService {
                     }
 
                     member.setLevel(newLevel);
-                    this.registry.set(member);
 
                     break;
                 }

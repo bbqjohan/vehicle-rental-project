@@ -1,6 +1,7 @@
 package entity;
 
 public abstract class Item implements PricePolicy {
+    private static int idCount = 0;
     private int id;
     private boolean available;
     private final VehicleType type;
@@ -8,9 +9,8 @@ public abstract class Item implements PricePolicy {
     private final String brand;
     private final String model;
 
-    public Item(
-            int id, VehicleType type, String color, String brand, String model, boolean available) {
-        this.id = id;
+    public Item(VehicleType type, String color, String brand, String model, boolean available) {
+        this.id = idCount++;
         this.available = available;
         this.type = type;
         this.color = color;
